@@ -53,3 +53,31 @@ dots.forEach((dot) => {
 });
 
 setInterval(next, 6000);
+
+/* Staggered gallery reveal and hover hooks */
+document.addEventListener("DOMContentLoaded", () => {
+  const galleryImages = document.querySelectorAll(".gallery-grid img");
+  galleryImages.forEach((img, i) => {
+    if (!("loading" in HTMLImageElement.prototype)) {
+      // fallback for older browsers: set attribute
+      img.setAttribute("loading", "lazy");
+    } else {
+      img.loading = "lazy";
+    }
+
+    img.addEventListener("load", () => {
+      setTimeout(() => {
+        img.setAttribute("data-loaded", "true");
+      }, i * 120);
+    });
+
+    if (img.complete) {
+      setTimeout(() => {
+        img.setAttribute("data-loaded", "true");
+      }, i * 120);
+    }
+
+    img.addEventListener("mouseenter", () => img.classList.add("hovering"));
+    img.addEventListener("mouseleave", () => img.classList.remove("hovering"));
+  });
+});
